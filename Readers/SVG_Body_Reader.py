@@ -46,8 +46,10 @@ def save_svg(doc):
     return filename
 
 
-doc, body_parts = read_svg()
-set_color(body_parts, "chest", "#00fff2")
-save_svg(doc)
+# doc, body_parts = read_svg()
+# set_color(body_parts, "chest", "#00fff2")
+# save_svg(doc)
+
+
 
 
