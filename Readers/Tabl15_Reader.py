@@ -6,7 +6,7 @@ import numpy as np
 
 key = 'Umiejscowienie urazów'
 sheet_name = "tabl.15 "
-column_names = ['A', 'Dziedzina', 'C', 'D', 'Ogółem', 'Głowa', 'Szyja wraz z kręgosłupem szyjnym', 'Grzbiet łącznie z kręgosłupem', 'Tułów i organy wewnętrzne', 'Kończyny górne', 'Kończyny dolne', 'Całe ciało i jego różne części']
+column_names = ['A', 'Dziedzina', 'C', 'D', 'Ogółem', 'Glowa', 'Szyja', 'Grzbiet', 'Tulow', 'Rece', 'Nogi', 'Całe ciało i jego różne części']
 
 def parse_sheet(xl):
     df = pd.read_excel(xl, sheet_name, skiprows=7)
