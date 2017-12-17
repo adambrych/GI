@@ -159,7 +159,7 @@ def plotting_grouped(dict, x,dir, w, x_label):
         plt.ylabel(y_label)
         plt.xlabel(x_label)
         plt.title(title)
-        plt.legend(['2013', '2014', '2015', '2016'])
+        plt.legend(['2012', '2013', '2014', '2015', '2016'])
         title = title.replace(' ', '_')
         title = title.replace('.', '')
         title = title.replace('\n', '')
