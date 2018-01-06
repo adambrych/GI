@@ -8,10 +8,10 @@ import Readers.Tabl35_Reader as t35
 def get_all():
     all_dict = dict()
 
-    all_dict[t6.key] = t6.read_xlsx();
-    all_dict[t7.key] = t7.read_xlsx();
-    all_dict[t8.key] = t8.read_xlsx();
-    all_dict[t15.key] = t15.read_xlsx();
-    all_dict[t33.key] = t33.read_xlsx();
-    all_dict[t35.key] = t35.read_xlsx();
-    return all_dict;
+    all_dict[t6.key] = t6.read_xlsx()
+    all_dict[t7.key] = t7.read_xlsx()
+    all_dict[t8.key] = t8.read_xlsx()
+    all_dict[t15.key] = t15.read_xlsx()
+    all_dict[t33.key] = t33.read_xlsx()
+    all_dict[t35.key] = t35.read_xlsx()
+    return all_dict

@@ -14,7 +14,7 @@ def parse_sheet(xl):
     df = df.drop('A', 1)
     df = df.drop('C', 1)
     df = df.drop('D', 1)
-    df = df[np.isfinite(df['Ogółem'])]
+    df = df[pd.notnull(df['Ogółem'])]
     return df
 
 def get_one(file_name):
@@ -22,7 +22,7 @@ def get_one(file_name):
      xl = pd.ExcelFile(path)
      return parse_sheet(xl)
 
-def read_xlsx(max_years=4):
+def read_xlsx(max_years=5):
     sheet_dict = dict()
     for file_index, file_name in enumerate(os.listdir(rc.DATA_PATH)):
         if file_index < max_years:
