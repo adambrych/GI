@@ -8,7 +8,7 @@ def generate_map():
     poland = Map_Reader.read_map()
     poland = poland.sort_values(by="name", ascending=True)
     data = District_Reader.read_xlsx()
-    year = data["2014"]
+    year = data["2009"]
     year = year.drop([0])
     year = year.sort_values(by=year.columns[0], ascending=True)
     year_list = year[year.columns[1]].tolist()

@@ -146,7 +146,10 @@ def plotting_grouped(dict, x,dir, w, x_label):
             title = title_B + work
         else:
             title = title_C + work
-
+        title = title.replace(" w tym ", "")
+        idx = title.find("(")
+        if idx > -1:
+            title = title[:idx]
 
         dim = len(y[0])
         dimw = w / dim
