@@ -2,13 +2,10 @@ import Readers.SVG_Body_Reader as SVG_Body_Reader
 import Readers.Tabl15_Reader as InjuryReader
 import cairosvg
 import Config
-import sys
 from PIL import Image
 
 
-def rgb(value):
-    minimum = 0
-    maximum = 1
+def rgb(value, minimum, maximum):
     minimum, maximum = float(minimum), float(maximum)
     ratio = 2 * (value-minimum) / (maximum - minimum)
     b = int(max(0, 255*(1 - ratio)))
@@ -22,6 +19,9 @@ def generate_heatmap():
     injuries = InjuryReader.read_xlsx()
     body_parts_names = ["Glowa", "Tulow", "Grzbiet", "Rece", "Nogi", "Szyja"]
     for i in injuries:
+        if Config.YEAR_ARG_USER is not None:
+            if int(i) != Config.YEAR_ARG_USER:
+                continue
         injury_count = injuries[i].iloc[0]
         sum = 0
         for j in body_parts_names:
@@ -31,11 +31,13 @@ def generate_heatmap():
         arms = injury_count["Rece"] / sum
         legs = injury_count["Nogi"] / sum
         neck = injury_count["Szyja"] / sum
-        SVG_Body_Reader.set_color(body_parts, "chest", rgb(chest))
-        SVG_Body_Reader.set_color(body_parts, "head", rgb(head))
-        SVG_Body_Reader.set_color(body_parts, "arms", rgb(arms))
-        SVG_Body_Reader.set_color(body_parts, "legs", rgb(legs))
-        SVG_Body_Reader.set_color(body_parts, "neck", rgb(neck))
+        max_ratio = max([chest, head, arms, legs, neck])
+        min_ratio = min([chest, head, arms, legs, neck])
+        SVG_Body_Reader.set_color(body_parts, "chest", rgb(chest, min_ratio, max_ratio))
+        SVG_Body_Reader.set_color(body_parts, "head", rgb(head, min_ratio, max_ratio))
+        SVG_Body_Reader.set_color(body_parts, "arms", rgb(arms, min_ratio, max_ratio))
+        SVG_Body_Reader.set_color(body_parts, "legs", rgb(legs, min_ratio, max_ratio))
+        SVG_Body_Reader.set_color(body_parts, "neck", rgb(neck, min_ratio, max_ratio))
         SVG_Body_Reader.save_svg(doc)
         cairosvg.svg2png(bytestring=doc.toxml(), write_to=Config.IMG_PATH + "/heatmap_temp_"+i+".png")
         scale_img = Image.open(Config.IMG_PATH + "\\heatmap_scale.png")
@@ -44,6 +46,4 @@ def generate_heatmap():
         new_img.paste(heatmap_img, (0, 0))
         new_img.paste(scale_img, (250, 0))
         new_img.save(Config.IMG_PATH + "\\heatmap_"+i+".png")
-
-generate_heatmap()
 

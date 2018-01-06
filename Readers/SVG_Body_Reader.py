@@ -40,7 +40,7 @@ def set_color(body_parts, part, color):
 
 
 def save_svg(doc):
-    filename = "injury_head_map_"+timestamp()+".svg"
+    filename = "injury_heat_map_"+timestamp()+".svg"
     with open(Config.IMG_PATH + "\\" + filename, "w") as svg_file:
         doc.writexml(svg_file)
     return filename
