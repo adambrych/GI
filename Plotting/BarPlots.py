@@ -54,6 +54,7 @@ def plotting(dict, x, dir, x_label):
             title = title.replace(' ', '_')
             title = title.replace('.', '')
             title = title.replace('\n', '')
+            title = title.replace('w tym', '')
             title = year + '_' + title
             fig.savefig(config.PLOTS_PATH + '\\' + dir +'\\' + path + title, bbox_inches='tight', dpi=fig.dpi)
             plt.cla()
@@ -98,6 +99,7 @@ def plotting_percent(dict, x, dir):
             title = title.replace(' ', '_')
             title = title.replace('.', '')
             title = title.replace('\n', '')
+            title = title.replace('w tym', '')
             title = year + '_' + title
             fig.savefig(config.PLOTS_PATH + '\\' + dir +'\\' + path + title, bbox_inches='tight', dpi=fig.dpi)
             plt.cla()
@@ -130,13 +132,20 @@ def plotting_grouped(dict, x,dir, w, x_label):
     for index in range(0, len(dict[list(dict.keys())[0]].index)):
         if index > len(dict[list(dict.keys())[0]].index)/2-1: # nie branie odsetek
                 break
+        plt.figure(figsize=(8, 6))
         y = []
+        y2 = []
         y_index = 0
         for year in dict.keys():
-            y.append([])
+            if y_index < 4:
+                y.append([])
+                for i in range(0, len(x)):
+                    y[y_index].append(dict[year].iloc[[index]][x[i]].values[0])
+            else:
+                y2.append([])
+                for i in range(0, len(x)):
+                    y2[y_index-4].append(dict[year].iloc[[index]][x[i]].values[0])
 
-            for i in range(0, len(x)):
-                y[y_index].append(dict[year].iloc[[index]][x[i]].values[0])
             y_index += 1
 
         if index % 3 == 0:
@@ -146,6 +155,8 @@ def plotting_grouped(dict, x,dir, w, x_label):
             title = title_B + work
         else:
             title = title_C + work
+
+        plt.suptitle(title, fontsize=16)
         title = title.replace(" w tym ", "")
         idx = title.find("(")
         if idx > -1:
@@ -153,7 +164,7 @@ def plotting_grouped(dict, x,dir, w, x_label):
 
         dim = len(y[0])
         dimw = w / dim
-        fig = plt.figure()
+        plt.subplot(121)
         x_plot = np.arange(len(x))
         for i in range(0,len(y)):
             plt.bar(x_plot + i * dimw, pd.to_numeric(y[i]), dimw)
@@ -161,12 +172,26 @@ def plotting_grouped(dict, x,dir, w, x_label):
         plt.xticks(x_plot, x, rotation=45)
         plt.ylabel(y_label)
         plt.xlabel(x_label)
-        plt.title(title)
-        plt.legend(['2012', '2013', '2014', '2015', '2016'])
+        plt.legend(['2009', '2010', '2011', '2012'])
+
+
+        plt.subplot(122)
+        x_plot = np.arange(len(x))
+        for i in range(0,len(y2)):
+            plt.bar(x_plot + i * dimw, pd.to_numeric(y2[i]), dimw)
+
+        plt.xticks(x_plot, x, rotation=45)
+        plt.ylabel(y_label)
+        plt.xlabel(x_label)
+        plt.legend(['2013', '2014', '2015', '2016'])
+
+
         title = title.replace(' ', '_')
         title = title.replace('.', '')
         title = title.replace('\n', '')
-        fig.savefig(config.PLOTS_PATH + '\\' + dir + '\\Group\\' + title, bbox_inches='tight', dpi=fig.dpi)
+        title = title.replace('w tym', '')
+
+        plt.savefig(config.PLOTS_PATH + '\\' + dir + '\\Group\\' + title, bbox_inches='tight')
 
         plt.cla()
         plt.close()
