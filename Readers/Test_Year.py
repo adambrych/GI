@@ -6,7 +6,7 @@ import Readers.Tabl33_Reader as t33
 import Readers.Tabl35_Reader as t35
 
 def get_all():
-    file_name = "2012.xls"
+    file_name = "2009.xls"
     t6.get_one(file_name)
     t7.get_one(file_name)
     t8.get_one(file_name)

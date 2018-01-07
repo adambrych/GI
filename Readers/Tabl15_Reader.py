@@ -22,7 +22,7 @@ def get_one(file_name):
      xl = pd.ExcelFile(path)
      return parse_sheet(xl)
 
-def read_xlsx(max_years=5):
+def read_xlsx(max_years=8):
     sheet_dict = dict()
     for file_index, file_name in enumerate(os.listdir(rc.DATA_PATH)):
         if file_index < max_years:
