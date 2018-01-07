@@ -3,6 +3,7 @@ from tkinter import ttk
 import Config
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
+import Generate_Pdf
 
 
 def generate_grid(year_from, year_to, filename, cols=3):
@@ -57,6 +58,8 @@ def generate_report(years, obszary, sectors):
     obszary_names = ["bars", "heatmap", "districtmap"]
     year_from = years[0].get()
     year_to = years[1].get()
+    if year_from > year_to:
+        return
     size = int(year_to) - int(year_from)
     for i in range(0, len(obszary)):
         if obszary[i].get() == 1:
@@ -81,7 +84,7 @@ def generate_report(years, obszary, sectors):
                             generate_grid_bar(year_from, year_to, sectors_names[j], "Practice", "Hard")
                             generate_grid_bar(year_from, year_to, sectors_names[j], "Practice", "Deaths")
                             generate_grid_bar(year_from, year_to, sectors_names[j], "Practice", "Total")
-
+    Generate_Pdf.generate(year_from, year_to, obszary, sectors)
 
 
 def create_gui():
@@ -136,7 +139,7 @@ def create_gui():
     tk.Checkbutton(frameSektory, text="Transport", variable=transport).grid(row=3, column=1, stick=tk.W)
     frameSektory.pack(pady=10)
     years = [yearFromVar, yearToVar]
-    obszary = [bar_plots, heat_map, district_map]
+    obszary = [heat_map, district_map, bar_plots]
     sectors = [rolnictwo, gornictwo, przetworstwo, zaopatrzenie, budownictwo, transport]
     tk.Button(root, text="Wygeneruj raport", command=lambda: generate_report(years, obszary, sectors)).pack(pady=10)
     root.mainloop()
