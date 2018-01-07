@@ -8,14 +8,15 @@ def generate_map():
     poland = Map_Reader.read_map()
     poland = poland.sort_values(by="name", ascending=True)
     data = District_Reader.read_xlsx()
-    year = data["2009"]
+    title = "2016"
+    year = data[title]
     year = year.drop([0])
     year = year.sort_values(by=year.columns[0], ascending=True)
     year_list = year[year.columns[1]].tolist()
     poland['plot'] = pd.Series(year_list, index=poland.index)
     poland.plot(column='plot', scheme='fisher_jenks', cmap='Reds', k=16)
     plt.axis('off')
-    plt.title("Liczba wyplaconych odszkodowan w roku 2013")
-    plt.show()
+    plt.title("Liczba wyplaconych odszkodowan w roku " + title)
+    plt.savefig("odszkodowania_"+title+".png", bbox_inches='tight')
 
 generate_map()

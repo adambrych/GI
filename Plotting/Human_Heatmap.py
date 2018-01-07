@@ -3,6 +3,8 @@ import Readers.Tabl15_Reader as InjuryReader
 import cairosvg
 import Config
 from PIL import Image
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 
 def rgb(value, minimum, maximum):
@@ -16,7 +18,7 @@ def rgb(value, minimum, maximum):
 
 def generate_heatmap():
     doc, body_parts = SVG_Body_Reader.read_svg()
-    injuries = InjuryReader.read_xlsx()
+    injuries = InjuryReader.read_xlsx(max_years=8)
     body_parts_names = ["Glowa", "Tulow", "Grzbiet", "Rece", "Nogi", "Szyja"]
     for i in injuries:
         if Config.YEAR_ARG_USER is not None:
@@ -46,4 +48,5 @@ def generate_heatmap():
         new_img.paste(heatmap_img, (0, 0))
         new_img.paste(scale_img, (250, 0))
         new_img.save(Config.IMG_PATH + "\\heatmap_"+i+".png")
+
 
