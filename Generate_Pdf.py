@@ -1,7 +1,7 @@
 from reportlab.pdfgen import canvas as cnv
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import utils
-from reportlab.platypus import Image
+import os
 import Config
 
 
@@ -20,20 +20,20 @@ def generate(year_from, year_to, obszary, sectors):
             if obszary_names[i] == "heatmap":
                 canvas.setFont("Helvetica", 14)
                 canvas.drawString(20, 710, 'Mapy cieplne umiejscowienia urazu:')
-                page_width = 20
+                page_width = 100
                 page_height = 430
                 for j in range(0, size):
                     img = utils.ImageReader(Config.IMG_PATH + "\\" + "heatmap_" + str(int(year_from)+j) + ".png")
                     iw, ih = img.getSize()
                     if j % 2 == 1 and page_width + iw/2 < width:
                         page_width += iw/2 + 20
-                    elif page_width > 20:
-                        page_width = 20
+                    elif page_width > 100:
+                        page_width = 100
                         page_height -= ih/2 + 20
                     canvas.drawImage(img, page_width, page_height, iw/2, ih/2, mask="auto")
-                    if page_height <= ih/2 and page_width > 20:
+                    if page_height <= ih/2 and page_width > 100:
                         page_height = 750 - ih/2
-                        page_width = 20
+                        page_width = 100
                         canvas.showPage()
                 page_width = 20
                 if size > 4:
@@ -49,7 +49,7 @@ def generate(year_from, year_to, obszary, sectors):
                     if size != 4:
                         canvas.showPage()
             elif obszary_names[i] == "districtmap":
-                print('witam')
+                print('district')
                 page_width = 20
                 page_height = 550
                 canvas.drawString(page_width, 750, 'Kartogramy liczby wyplaconych odszkodowan:')
@@ -61,7 +61,7 @@ def generate(year_from, year_to, obszary, sectors):
                     elif page_width > 20:
                         page_width = 20
                         page_height -= ih/2 + 20
-                    canvas.drawImage(img, page_width, page_height, iw/2, ih/2, mask="auto")
+                    canvas.drawImage(img, page_width, page_height, iw/2.3, ih/2, mask="auto")
                     if page_height <= ih/2 and page_width > 20:
                         page_height = 750 - ih/2
                         page_width = 20
@@ -78,7 +78,7 @@ def generate(year_from, year_to, obszary, sectors):
                 else:
                     if size != 6:
                         canvas.showPage()
-                print('wita02m')
+                print('bars')
                 page_width = 20
                 page_height = 550
                 canvas.drawString(page_width, 750, 'Kartogramy kwoty wyplaconych odszkodowan:')
@@ -90,7 +90,7 @@ def generate(year_from, year_to, obszary, sectors):
                     elif page_width > 20:
                         page_width = 20
                         page_height -= ih/2 + 20
-                    canvas.drawImage(img, page_width, page_height, iw/2, ih/2, mask="auto")
+                    canvas.drawImage(img, page_width, page_height, iw/2.5, ih/2, mask="auto")
                     if page_height <= ih/2 and page_width > 20:
                         page_height = 750 - ih/2
                         page_width = 20
@@ -255,3 +255,4 @@ def generate(year_from, year_to, obszary, sectors):
 
 
     canvas.save()
+    os.startfile('report.pdf', 'open')

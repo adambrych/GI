@@ -32,28 +32,32 @@ def generate_grid(year_from, year_to, filename, cols=3):
 
 
 def generate_grid_bar(year_from, year_to, sector, type, accident_type):
-    cols = 2
-    size = int(year_to) - int(year_from) + 1
-    imgs = []
-    for i in range(0, size):
-        year = str(int(year_from)+i)
-        imgs.append(mpimg.imread(Config.PLOTS_PATH + "\\" + type + "\\" + year + "\\" + accident_type + "\\" + sector + ".png"))
-    n_rows = (size // cols)
-    if size % cols != 0:
-        n_rows += 1
-    n_cols = cols
-    if size < cols:
-        n_cols = size
-    for i in range(0, size):
+    try:
+        cols = 2
+        size = int(year_to) - int(year_from) + 1
+        imgs = []
+        for i in range(0, size):
+            year = str(int(year_from)+i)
+            imgs.append(mpimg.imread(Config.PLOTS_PATH + "\\" + type + "\\" + year + "\\" + accident_type + "\\" + sector + ".png"))
+        n_rows = (size // cols)
+        if size % cols != 0:
+            n_rows += 1
+        n_cols = cols
+        if size < cols:
+            n_cols = size
+        for i in range(0, size):
+            plt.axis('off')
+            plt.subplots_adjust(hspace =.001, wspace=.001)
+            plt.subplot(n_rows, n_cols, i+1)
+            plt.imshow(imgs[i])
         plt.axis('off')
-        plt.subplots_adjust(hspace =.001, wspace=.001)
-        plt.subplot(n_rows, n_cols, i+1)
-        plt.imshow(imgs[i])
-    plt.axis('off')
-    plt.savefig(Config.IMG_PATH + "\\" + sector+"_"+type+"_"+accident_type+"_grid.png", bbox_inches='tight')
+        plt.savefig(Config.IMG_PATH + "\\" + sector+"_"+type+"_"+accident_type+"_grid.png", bbox_inches='tight')
+    except Exception:
+        print("Brak obrazka")
 
 
-def generate_report(years, obszary, sectors):
+def generate_report(years, obszary, sectors, status_string):
+    status_string.set("Prosze czekac...")
     sectors_names = ["rolnictwo", "gornictwo", "przetworstwo", "zaopatrywanie", "budownictwo", "transport"]
     obszary_names = ["bars", "heatmap", "districtmap"]
     year_from = years[0].get()
@@ -85,12 +89,13 @@ def generate_report(years, obszary, sectors):
                             generate_grid_bar(year_from, year_to, sectors_names[j], "Practice", "Deaths")
                             generate_grid_bar(year_from, year_to, sectors_names[j], "Practice", "Total")
     Generate_Pdf.generate(year_from, year_to, obszary, sectors)
+    status_string.set("Raport gotowy")
 
 
 def create_gui():
     root = tk.Tk()
     w = 640
-    h = 350
+    h = 360
     ws = root.winfo_screenwidth()
     hs = root.winfo_screenheight()
     x = (ws/2) - (w/2)
@@ -141,7 +146,9 @@ def create_gui():
     years = [yearFromVar, yearToVar]
     obszary = [heat_map, district_map, bar_plots]
     sectors = [rolnictwo, gornictwo, przetworstwo, zaopatrzenie, budownictwo, transport]
-    tk.Button(root, text="Wygeneruj raport", command=lambda: generate_report(years, obszary, sectors)).pack(pady=10)
+    status_string = tk.StringVar()
+    tk.Label(root, textvariable=status_string).pack()
+    tk.Button(root, text="Wygeneruj raport", command=lambda: generate_report(years, obszary, sectors, status_string)).pack(pady=8)
     root.mainloop()
 
 create_gui()

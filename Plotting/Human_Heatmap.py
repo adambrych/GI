@@ -50,3 +50,4 @@ def generate_heatmap():
         new_img.save(Config.IMG_PATH + "\\heatmap_"+i+".png")
 
 
+
